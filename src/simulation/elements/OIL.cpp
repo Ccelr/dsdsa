@@ -53,24 +53,24 @@ static int update(UPDATE_FUNC_ARGS)
 {
 	
 	
-	if (parts[i].tmpcity[7] == 0 && parts[i].tmp4 == 0)
+	if (parts[i].capacity == 0 && parts[i].tmp4 == 0)
 	{
 		parts[i].tmp4 = 100;
-		parts[i].tmpcity[7] = 400;
+		parts[i].capacity = 400;
 
 
 		//Cyens toy
 		//Spawns with carbons (20-60), temp must be min 42 ?C 
 		parts[i].carbons = RNG::Ref().between(20, 60);
-		parts[i].hydrogens = makeAlk(parts[i].carbons);
+		parts[i].co2 = makeAlk(parts[i].carbons);
 		//parts[i].carbons = rand() % 41 + 20;
-		if (parts[i].hydrogens < 2 * parts[i].carbons + 2)parts[i].tmp3 = getBondLoc(parts[i].carbons);
-		parts[i].life = parts[i].carbons + parts[i].hydrogens;
+		if (parts[i].co2 < 2 * parts[i].carbons + 2)parts[i].tmp3 = getBondLoc(parts[i].carbons);
+		parts[i].life = parts[i].carbons + parts[i].co2;
 	}
 
 	if (parts[i].tmp4 <= 0)
 	{
-		if (parts[i].oxygens > 0 || parts[i].carbons > 0 || parts[i].hydrogens > 0 || parts[i].water > 0 || parts[i].nitrogens > 0)
+		if (parts[i].oxygens > 0 || parts[i].carbons > 0 || parts[i].co2 > 0 || parts[i].water > 0 || parts[i].nitrogens > 0)
 		{
 				sim->part_change_type(i, x, y, PT_DUST);
 				
@@ -202,26 +202,26 @@ static  void create(ELEMENT_CREATE_FUNC_ARGS)
 	//Cyens toy
 	//Spawns with carbons (20-60), temp must be min 42 ?C
 	sim->parts[i].carbons = RNG::Ref().between(20, 60);
-	sim->parts[i].hydrogens = makeAlk(sim->parts[i].carbons);
+	sim->parts[i].co2 = makeAlk(sim->parts[i].carbons);
 	//sim->parts[i].carbons = rand() % 41 + 20;
-	if (sim->parts[i].hydrogens < 2 * sim->parts[i].carbons + 2)sim->parts[i].tmp3 = getBondLoc(sim->parts[i].carbons);
+	if (sim->parts[i].co2 < 2 * sim->parts[i].carbons + 2)sim->parts[i].tmp3 = getBondLoc(sim->parts[i].carbons);
 	//Essentially this is creating PRFN then melting it right away
 	//sim->parts[i].temp = 14.3f * sqrt(sim->parts[i].carbons - 12) + 273.15f;
-	sim->parts[i].life = sim->parts[i].carbons + sim->parts[i].hydrogens;
+	sim->parts[i].life = sim->parts[i].carbons + sim->parts[i].co2;
 }
 
 
 
 
 //cyens toy hydrocarbons port
-//type, carbons, hydrogens,   tmp3,				ctype
+//type, carbons, co2,   tmp3,				ctype
 //type,  life,     tmp,       tmp2,            ctype 
 
 
 static int graphics(GRAPHICS_FUNC_ARGS)
 {
 //	 *colr += (int)restrict_flt((cpart->carbons) / 10, 0, 255);
-	// *colb += (int)restrict_flt((cpart->hydrogens) / 10, 0, 255);
+	// *colb += (int)restrict_flt((cpart->co2) / 10, 0, 255);
 //	*firea = *cola;
 //	*firer = *colr;
 //	*fireg = *colb;

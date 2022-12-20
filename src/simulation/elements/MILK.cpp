@@ -40,10 +40,10 @@ void Element::Element_MILK() {
 
 	DefaultProperties.oxygens = 10;
 	DefaultProperties.carbons = 100;
-	DefaultProperties.hydrogens = 20;
+	DefaultProperties.co2 = 20;
 	DefaultProperties.tmp4 = 100;
 	DefaultProperties.water = 80;
-	DefaultProperties.tmpcity[7] = 300;
+	DefaultProperties.capacity = 300;
 
 	LowPressure = IPL;
 	LowPressureTransition = NT;
@@ -96,7 +96,7 @@ static int update(UPDATE_FUNC_ARGS) {
 	}
 
 	// Touching dirty stuff spoils it
-	int capacity = 0;
+	int lcapacity = 0;
 	int rx, ry, r;
 	for (rx = -1; rx < 2; ++rx)
 	for (ry = -1; ry < 2; ++ry)
@@ -117,39 +117,44 @@ static int update(UPDATE_FUNC_ARGS) {
 				else
 					partnum += 2;
 
-				capacity = parts[i].tmp4 + parts[i].oxygens + parts[i].carbons + parts[i].hydrogens + parts[i].water + parts[i].nitrogens;
-				if (RNG::Ref().chance(1, 8) && capacity + 2 < parts[i].tmpcity[7])
+				lcapacity = parts[i].tmp4 + parts[i].oxygens + parts[i].carbons + parts[i].co2 + parts[i].co2 + parts[i].water + parts[i].nitrogens;
+				if (RNG::Ref().chance(1, 8) && lcapacity + 2 < parts[i].capacity)
 				{
 
 					// take
-					if (parts[i].tmp4 < parts[i].tmpcity[7] / 2 && parts[ID(r)].tmp4 > 0 && parts[i].tmp4 < parts[ID(r)].tmp4 && (parts[i].tmp4 <= 0 || parts[ID(r)].ctype == parts[i].ctype) && RNG::Ref().chance(1, 6))
+					if (parts[i].tmp4 < parts[i].capacity / 2 && parts[ID(r)].tmp4 > 0 && parts[i].tmp4 < parts[ID(r)].tmp4 && (parts[i].tmp4 <= 0 || parts[ID(r)].ctype == parts[i].ctype) && RNG::Ref().chance(1, 6))
 					{
 						parts[i].tmp4 += std::min(partnum, parts[ID(r)].tmp4);
 						parts[ID(r)].tmp4 -= std::min(partnum, parts[ID(r)].tmp4);
 						parts[i].ctype = parts[ID(r)].ctype;
 					}
-					if (parts[i].oxygens < parts[i].tmpcity[7] / 2 && parts[ID(r)].oxygens > 0 && parts[i].oxygens < parts[ID(r)].oxygens && RNG::Ref().chance(1, 6))
+					if (parts[i].oxygens < parts[i].capacity / 2 && parts[ID(r)].oxygens > 0 && parts[i].oxygens < parts[ID(r)].oxygens && RNG::Ref().chance(1, 6))
 					{
 						parts[i].oxygens += std::min(partnum, parts[ID(r)].oxygens);
 						parts[ID(r)].oxygens -= std::min(partnum, parts[ID(r)].oxygens);
 					}
-					if (parts[i].carbons < parts[i].tmpcity[7] / 2 && parts[ID(r)].carbons > 0 && parts[i].carbons < parts[ID(r)].carbons && RNG::Ref().chance(1, 6))
+					if (parts[i].carbons < parts[i].capacity / 2 && parts[ID(r)].carbons > 0 && parts[i].carbons < parts[ID(r)].carbons && RNG::Ref().chance(1, 6))
 					{
 						parts[i].carbons += std::min(partnum, parts[ID(r)].carbons);
 						parts[ID(r)].carbons -= std::min(partnum, parts[ID(r)].carbons);
 					}
-					if (parts[i].hydrogens < parts[i].tmpcity[7] / 2 && parts[ID(r)].hydrogens > 0 && parts[i].hydrogens < parts[ID(r)].hydrogens && RNG::Ref().chance(1, 6))
+					if (parts[i].co2 < parts[i].capacity / 2 && parts[ID(r)].co2 > 0 && parts[i].co2 < parts[ID(r)].co2 && RNG::Ref().chance(1, 6))
 					{
-						parts[i].hydrogens += std::min(partnum, parts[ID(r)].hydrogens);
-						parts[ID(r)].hydrogens -= std::min(partnum, parts[ID(r)].hydrogens);
+						parts[i].co2 += std::min(partnum, parts[ID(r)].co2);
+						parts[ID(r)].co2 -= std::min(partnum, parts[ID(r)].co2);
 					}
-					if (parts[i].nitrogens < parts[i].tmpcity[7] / 2 && parts[ID(r)].nitrogens > 0 && parts[i].nitrogens < parts[ID(r)].nitrogens && RNG::Ref().chance(1, 6))
+					if (parts[i].co2 < parts[i].capacity / 2 && parts[ID(r)].co2 > 0 && parts[i].co2 < parts[ID(r)].co2 && RNG::Ref().chance(1, 6))
+					{
+						parts[i].co2 += std::min(partnum, parts[ID(r)].co2);
+						parts[ID(r)].co2 -= std::min(partnum, parts[ID(r)].co2);
+					}
+					if (parts[i].nitrogens < parts[i].capacity / 2 && parts[ID(r)].nitrogens > 0 && parts[i].nitrogens < parts[ID(r)].nitrogens && RNG::Ref().chance(1, 6))
 					{
 						parts[i].nitrogens += std::min(partnum, parts[ID(r)].nitrogens);
 						parts[ID(r)].nitrogens -= std::min(partnum, parts[ID(r)].nitrogens);
 
 					}
-					if (parts[i].water < parts[i].tmpcity[7] / 2 && parts[ID(r)].water > 0 && parts[i].water < parts[ID(r)].water && RNG::Ref().chance(1, 6))
+					if (parts[i].water < parts[i].capacity / 2 && parts[ID(r)].water > 0 && parts[i].water < parts[ID(r)].water && RNG::Ref().chance(1, 6))
 					{
 						parts[i].water += std::min(partnum, parts[ID(r)].water);
 						parts[ID(r)].water -= std::min(partnum, parts[ID(r)].water);
@@ -158,40 +163,45 @@ static int update(UPDATE_FUNC_ARGS) {
 
 				}
 				//give
-				capacity = parts[ID(r)].tmp4 + parts[ID(r)].oxygens + parts[ID(r)].carbons + parts[ID(r)].hydrogens + parts[ID(r)].water + parts[ID(r)].nitrogens;
-				if (RNG::Ref().chance(1, 8) && capacity + 2	 < parts[ID(r)].tmpcity[7])
+				lcapacity = parts[ID(r)].tmp4 + parts[ID(r)].oxygens + parts[ID(r)].carbons + parts[ID(r)].co2 + parts[ID(r)].co2 + parts[ID(r)].water + parts[ID(r)].nitrogens;
+				if (RNG::Ref().chance(1, 8) && lcapacity + 2	 < parts[ID(r)].capacity)
 				{
 
 					{
-						if (parts[ID(r)].tmp4 < parts[ID(r)].tmpcity[7] / 2 && parts[i].tmp4 > parts[ID(r)].tmp4 && (parts[ID(r)].tmp4 == 0 || parts[i].ctype == parts[ID(r)].ctype) && RNG::Ref().chance(1, 6))
+						if (parts[ID(r)].tmp4 < parts[ID(r)].capacity / 2 && parts[i].tmp4 > parts[ID(r)].tmp4 && (parts[ID(r)].tmp4 == 0 || parts[i].ctype == parts[ID(r)].ctype) && RNG::Ref().chance(1, 6))
 						{
 							parts[ID(r)].tmp4 += std::min(partnum, parts[i].tmp4);
 							parts[i].tmp4 -= std::min(partnum, parts[i].tmp4);
 							parts[ID(r)].ctype = parts[i].ctype;
 						}
 						//((parts[ID(r)].tmp4 == 0 && parts[ID(r)].ctype == 0) || parts[ID(r)].ctype == parts[i].ctype)
-						if (parts[ID(r)].oxygens < parts[ID(r)].tmpcity[7] / 2 && parts[i].oxygens > 0 && parts[ID(r)].oxygens < parts[i].oxygens && RNG::Ref().chance(1, 6))
+						if (parts[ID(r)].oxygens < parts[ID(r)].capacity / 2 && parts[i].oxygens > 0 && parts[ID(r)].oxygens < parts[i].oxygens && RNG::Ref().chance(1, 6))
 						{
 							parts[ID(r)].oxygens += std::min(partnum, parts[i].oxygens);
 							parts[i].oxygens -= std::min(partnum, parts[i].oxygens);
 						}
-						if (parts[ID(r)].carbons < parts[ID(r)].tmpcity[7] / 2 && parts[i].carbons > 0 && parts[ID(r)].carbons < parts[i].carbons && RNG::Ref().chance(1, 6))
+						if (parts[ID(r)].carbons < parts[ID(r)].capacity / 2 && parts[i].carbons > 0 && parts[ID(r)].carbons < parts[i].carbons && RNG::Ref().chance(1, 6))
 						{
 							parts[ID(r)].carbons += std::min(partnum, parts[i].carbons);
 							parts[i].carbons -= std::min(partnum, parts[i].carbons);
 						}
-						if (parts[ID(r)].hydrogens < parts[ID(r)].tmpcity[7] / 2 && parts[i].hydrogens > 0 && parts[ID(r)].hydrogens < parts[i].hydrogens && RNG::Ref().chance(1, 6))
+						if (parts[ID(r)].co2 < parts[ID(r)].capacity / 2 && parts[i].co2 > 0 && parts[ID(r)].co2 < parts[i].co2 && RNG::Ref().chance(1, 6))
 						{
-							parts[ID(r)].hydrogens += std::min(partnum, parts[i].hydrogens);
-							parts[i].hydrogens -= std::min(partnum, parts[i].hydrogens);
+							parts[ID(r)].co2 += std::min(partnum, parts[i].co2);
+							parts[i].co2 -= std::min(partnum, parts[i].co2);
 						}
-						if (parts[ID(r)].nitrogens < parts[ID(r)].tmpcity[7] / 2 && parts[i].nitrogens > 0 && parts[ID(r)].nitrogens < parts[i].nitrogens && RNG::Ref().chance(1, 6))
+						if (parts[ID(r)].co2 < parts[ID(r)].capacity / 2 && parts[i].co2 > 0 && parts[ID(r)].co2 < parts[i].co2 && RNG::Ref().chance(1, 6))
+						{
+							parts[ID(r)].co2 += std::min(partnum, parts[i].co2);
+							parts[i].co2 -= std::min(partnum, parts[i].co2);
+						}
+						if (parts[ID(r)].nitrogens < parts[ID(r)].capacity / 2 && parts[i].nitrogens > 0 && parts[ID(r)].nitrogens < parts[i].nitrogens && RNG::Ref().chance(1, 6))
 						{
 							parts[ID(r)].nitrogens += std::min(partnum, parts[i].nitrogens);
 							parts[i].nitrogens -= std::min(partnum, parts[i].nitrogens);
 
 						}
-						if (parts[ID(r)].water < parts[ID(r)].tmpcity[7] / 2 && parts[i].water > 0 && parts[ID(r)].water < parts[i].water && RNG::Ref().chance(1, 6))
+						if (parts[ID(r)].water < parts[ID(r)].capacity / 2 && parts[i].water > 0 && parts[ID(r)].water < parts[i].water && RNG::Ref().chance(1, 6))
 						{
 							parts[ID(r)].water += std::min(partnum, parts[i].water);
 							parts[i].water -= std::min(partnum, parts[i].water);

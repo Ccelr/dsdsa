@@ -35,11 +35,11 @@ void Element::Element_UDDR() {
 
 	DefaultProperties.oxygens = 100;
 	DefaultProperties.carbons = 100;
-	DefaultProperties.hydrogens = 20;
+	DefaultProperties.co2 = 20;
 	DefaultProperties.water = 50;
 	DefaultProperties.tmp3 = 100;
 	DefaultProperties.tmp4 = 100;
-	DefaultProperties.tmpcity[7] = 800;
+	DefaultProperties.capacity = 800;
 	DefaultProperties.tmpcity[3] = 100;
 	DefaultProperties.tmpcity[9] = 0;
 	DefaultProperties.metabolism = 50;

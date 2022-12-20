@@ -56,21 +56,21 @@ static int update(UPDATE_FUNC_ARGS)
 
 
 
-	if (parts[i].tmpcity[7] == 0 && parts[i].tmp4 == 0)
+	if (parts[i].capacity == 0 && parts[i].tmp4 == 0)
 	{
 		parts[i].tmp4 = 100;
-		parts[i].tmpcity[7] = 400;
+		parts[i].capacity = 400;
 
 		parts[i].carbons = RNG::Ref().between(8, 14);
-		parts[i].hydrogens = makeAlk(parts[i].carbons);
+		parts[i].co2 = makeAlk(parts[i].carbons);
 
-		if (parts[i].hydrogens < 2 * parts[i].carbons + 2)
+		if (parts[i].co2 < 2 * parts[i].carbons + 2)
 		parts[i].tmp3 = getBondLoc(parts[i].carbons);
 	}
 
 	if (parts[i].tmp4 <= 0)
 	{
-		if (parts[i].oxygens > 0 || parts[i].carbons > 0 || parts[i].hydrogens > 0 || parts[i].water > 0 || parts[i].nitrogens > 0)
+		if (parts[i].oxygens > 0 || parts[i].carbons > 0 || parts[i].co2 > 0 || parts[i].water > 0 || parts[i].nitrogens > 0)
 		{
 				sim->part_change_type(i, x, y, PT_DUST);
 				
@@ -103,7 +103,7 @@ static void create(ELEMENT_CREATE_FUNC_ARGS)
 	//Cyens toy
 	//Spawns with carbons (8-14)
 	sim->parts[i].carbons = RNG::Ref().between(8, 14);
-	sim->parts[i].hydrogens = makeAlk(sim->parts[i].carbons);
-	if (sim->parts[i].hydrogens < 2 * sim->parts[i].carbons + 2)sim->parts[i].tmp3 = getBondLoc(sim->parts[i].carbons);
+	sim->parts[i].co2 = makeAlk(sim->parts[i].carbons);
+	if (sim->parts[i].co2 < 2 * sim->parts[i].carbons + 2)sim->parts[i].tmp3 = getBondLoc(sim->parts[i].carbons);
 
 }

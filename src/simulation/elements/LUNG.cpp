@@ -36,11 +36,11 @@ void Element::Element_LUNG() {
 
 	DefaultProperties.carbons = 50;
 	DefaultProperties.oxygens = 50;
-	DefaultProperties.hydrogens = 10;
+	DefaultProperties.co2 = 10;
 	DefaultProperties.water = 50;
 	DefaultProperties.tmp3 = 100;
 	DefaultProperties.tmp4 = 100;
-	DefaultProperties.tmpcity[7] = 800;
+	DefaultProperties.capacity = 800;
 	DefaultProperties.tmpcity[3] = 100;
 	DefaultProperties.tmpcity[9] = 0;
 	DefaultProperties.metabolism = 50;
@@ -64,22 +64,23 @@ static int update(UPDATE_FUNC_ARGS) {
 	 * oxygens:   Oxygen stored
 	 * carbons:  Nutrients stored
 	 * tmp2: Highest temperature
-	 * hydrogens: waste
+	 * co2: waste
 	 * pavg[0]: Type 0 = inside, 1 = skin, 2 = dead
 	 * tmp3: health of part 0-100
 	 * tmp4: energy stored for use
 	 * tmpcity[8]:  != 0 breaks meat
 	 * water: water needed for life
-	 * tmpcity[7]: capacity for stuff
-	 * 
+	 * lcapacity: lcapacity for stuff
+	 * gassaturation: total amount of gasses to cap?
                   	 */
 	Element_FLSH_update(sim, i, x, y, surround_space, nt, parts, pmap);
-	int capacity = 0;
+	int lcapacity = 0;
+	parts[i].gassaturation = parts[i].oxygens + parts[i].co2;
 	if (parts[i].pavg[0] != 2)
 	{
-	if (parts[i].oxygens > parts[i].tmpcity[7] / 2 && RNG::Ref().chance(1, 100))
+	if (parts[i].oxygens > parts[i].capacity / 2 && RNG::Ref().chance(1, 100))
 		parts[i].tmpcity[5]++;
-	if (parts[i].hydrogens > 50 && RNG::Ref().chance(1, 10))
+	if (parts[i].co2 > 50 && RNG::Ref().chance(1, 10))
 		parts[i].tmpcity[6]++;
 
 
@@ -92,10 +93,10 @@ static int update(UPDATE_FUNC_ARGS) {
 					int partnum = 10;
 					if (!r)
 					{
-						if(parts[i].tmpcity[6] > 0 && parts[i].hydrogens > 50 + 10 && RNG::Ref().chance(1, 8))
+						if(parts[i].tmpcity[6] > 0 && parts[i].co2 > 50 + 10 && RNG::Ref().chance(1, 8))
 						{
-							parts[sim->create_part(-1, x + rx, y + ry, PT_CO2)].tmp3 = std::min(100, parts[i].hydrogens - 10);
-							parts[i].hydrogens -= std::min(100, parts[i].hydrogens - 10);
+							parts[sim->create_part(-1, x + rx, y + ry, PT_CO2)].tmp3 = std::min(100, parts[i].co2 - 10);
+							parts[i].co2 -= std::min(100, parts[i].co2 - 10);
 							parts[i].tmpcity[6]--;
 						}
 						if (parts[i].tmpcity[5] > 0 && parts[i].oxygens > 60 && RNG::Ref().chance(1, 8))
@@ -111,20 +112,20 @@ static int update(UPDATE_FUNC_ARGS) {
 					//	if (rt == PT_BRKN)
 						//	rt = parts[ID(r)].ctype;
 
-					if ((rt == PT_O2 || rt == PT_LO2 || rt == PT_WATR) && parts[i].oxygens < parts[i].tmpcity[7] / 2 && parts[ID(r)].oxygens > 0 && RNG::Ref().chance(1, 8)
+					if ((rt == PT_O2 || rt == PT_LO2) && parts[i].oxygens < parts[i].capacity / 2 && parts[ID(r)].oxygens > 0 && RNG::Ref().chance(1, 8)
 						) {
 
 						parts[i].oxygens += std::min(5, parts[ID(r)].oxygens);
 						parts[ID(r)].oxygens -= std::min(5, parts[ID(r)].oxygens);
 						//sim->kill_part(ID(r));
 					}
-					//int capacity = parts[ID(r)].oxygens + parts[ID(r)].carbons + parts[ID(r)].hydrogens + parts[ID(r)].water + parts[ID(r)].nitrogens;
-					/*if ((rt == PT_BVSL || rt == PT_BLOD) && capacity < parts[ID(r)].tmpcity[7] && parts[ID(r)].oxygens < parts[ID(r)].tmpcity[7] / 2 && parts[i].oxygens >= partnum + 10)
+					//int lcapacity = parts[ID(r)].oxygens + parts[ID(r)].carbons + parts[ID(r)].co2 + parts[ID(r)].water + parts[ID(r)].nitrogens;
+					/*if ((rt == PT_BVSL || rt == PT_BLOD) && lcapacity < parts[ID(r)].capacity && parts[ID(r)].oxygens < parts[ID(r)].capacity / 2 && parts[i].oxygens >= partnum + 10)
 					{
 						parts[ID(r)].oxygens += partnum;
 						parts[i].oxygens -= partnum;
 					}*/
-				//	capacity = 0;
+				//	lcapacity = 0;
 
 					//nerve signals
 					if(rt == PT_LUNG && parts[i].tmpcity[5] > parts[ID(r)].tmpcity[5] && parts[i].tmpcity[5] > 0 && parts[ID(r)].tmpcity[5] < 2  && parts[ID(r)].pavg[0] != 2 && RNG::Ref().chance(1, 8))
@@ -137,19 +138,19 @@ static int update(UPDATE_FUNC_ARGS) {
 						parts[ID(r)].tmpcity[6]++;
 						parts[i].tmpcity[6]--;
 					}
-				/*	if (rt == PT_LUNG && parts[ID(r)].oxygens < parts[ID(r)].tmpcity[7] / 2 && parts[i].oxygens >= partnum + 10 && parts[i].oxygens > parts[ID(r)].oxygens && RNG::Ref().chance(1, 8))
+				/*	if (rt == PT_LUNG && parts[ID(r)].oxygens < parts[ID(r)].capacity / 2 && parts[i].oxygens >= partnum + 10 && parts[i].oxygens > parts[ID(r)].oxygens && RNG::Ref().chance(1, 8))
 					{
 
 						parts[ID(r)].oxygens += partnum;
 						parts[i].oxygens -= partnum;
 
 					}*/
-					if (rt == PT_LUNG && parts[ID(r)].hydrogens < parts[ID(r)].tmpcity[7] / 3 && parts[i].hydrogens >= 10 + 10 && parts[i].hydrogens > parts[ID(r)].hydrogens && RNG::Ref().chance(1, 8))
+					if (rt == PT_LUNG && parts[ID(r)].co2 < parts[ID(r)].capacity / 3 && parts[i].co2 >= 10 + 10 && parts[i].co2 > parts[ID(r)].co2 && RNG::Ref().chance(1, 8))
 					{
 						partnum += 10;
 
-						parts[ID(r)].hydrogens += std::min(partnum, parts[i].hydrogens);
-						parts[i].hydrogens -= std::min(partnum, parts[i].hydrogens);
+						parts[ID(r)].co2	 += std::min(partnum, parts[i].co2);
+						parts[i].co2 -= std::min(partnum, parts[i].co2);
 
 					}
 

@@ -2161,7 +2161,7 @@ void GameView::OnDraw()
 				g->drawtext(140, 45, atomInfo.Build(), 255, 255, 255, int(alpha * 0.75f));
 			}
 			//else if (type == PT_GAS || type == PT_OIL || type == PT_WAX || type == PT_MWAX || type == PT_DESL) {
-			//	sampleInfo << c->hydrocarbonName(type, sample.particle.carbons, sample.particle.hydrogens, sample.particle.tmp3, sample.particle.ctype);// cyens toy
+			//	sampleInfo << c->hydrocarbonName(type, sample.particle.carbons, sample.particle.co2, sample.particle.tmp3, sample.particle.ctype);// cyens toy
 			//}
 			if (showDebug)
 			{
@@ -2216,7 +2216,7 @@ void GameView::OnDraw()
 			//		sampleInfo << c->ElementFullName(type);
 			//	}
 				else if (type == PT_GAS || type == PT_OIL || type == PT_WAX || type == PT_MWAX || type == PT_DESL) {
-					sampleInfo << c->hydrocarbonName(type, sample.particle.carbons, sample.particle.hydrogens, sample.particle.tmp3, sample.particle.ctype); 
+					sampleInfo << c->hydrocarbonName(type, sample.particle.carbons, sample.particle.co2, sample.particle.tmp3, sample.particle.ctype); 
 
 				}
 				else
@@ -2383,8 +2383,8 @@ void GameView::OnDraw()
 				if (sample.particle.water != 0)
 					sampleInfo << ", Water: " << sample.particle.water;
 
-				if (sample.particle.hydrogens != 0)
-					sampleInfo << ", Hydrogens: " << sample.particle.hydrogens;
+				if (sample.particle.co2 != 0)
+					sampleInfo << ", CO2: " << sample.particle.co2;
 				if (sample.particle.nitrogens != 0)
 					sampleInfo << ", Nitrogens: " << sample.particle.nitrogens;
 
@@ -2399,8 +2399,8 @@ void GameView::OnDraw()
 					sampleInfo << ", Nutrients(carbons): " << sample.particle.carbons;
 				if (sample.particle.water != 0)
 					sampleInfo << ", Water: " << sample.particle.water;
-				if (sample.particle.hydrogens != 0)
-					sampleInfo << ", CO2(hydrogens): " << sample.particle.hydrogens;
+				if (sample.particle.co2 != 0)
+					sampleInfo << ", CO2: " << sample.particle.co2;
 				if (sample.particle.tmp3 != 0)
 					sampleInfo << ", Health(tmp3): " << sample.particle.tmp3;
 				if (sample.particle.tmpcity[3] != 0)
@@ -2422,8 +2422,8 @@ void GameView::OnDraw()
 					TmpCityStrings << ", tmpcity[5]: " << sample.particle.tmpcity[5];
 				if (sample.particle.tmpcity[6] != 0)
 					TmpCityStrings << ", tmpcity[6]: " << sample.particle.tmpcity[6];
-				if (sample.particle.tmpcity[7] != 0)
-					TmpCityStrings << ", tmpcity[7]: " << sample.particle.tmpcity[7];
+				if (sample.particle.capacity != 0)
+					TmpCityStrings << ", capacity: " << sample.particle.capacity;
 				if (sample.particle.tmpcity[8] != 0)
 					TmpCityStrings << ", tmpcity[8]: " << sample.particle.tmpcity[8];
 				if (sample.particle.tmpcity[9] != 0)

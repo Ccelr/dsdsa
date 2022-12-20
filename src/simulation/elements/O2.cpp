@@ -51,13 +51,13 @@ int Element_O2_update(UPDATE_FUNC_ARGS)
 {
 
 
-		if (parts[i].tmpcity[7] == 0)
+		if (parts[i].capacity == 0)
 		{
 		
 
 			if(parts[i].oxygens == 0)
 				parts[i].oxygens = RNG::Ref().between(50, 100) * 2;
-			parts[i].tmpcity[7] = 400;
+			parts[i].capacity = 400;
 		}
 
 
@@ -128,5 +128,5 @@ int Element_O2_update(UPDATE_FUNC_ARGS)
 static void create(ELEMENT_CREATE_FUNC_ARGS)
 {
 	sim->parts[i].oxygens = RNG::Ref().between(50, 100) * 2;
-	sim->parts[i].tmpcity[7] = 400;
+	sim->parts[i].capacity = 400;
 }

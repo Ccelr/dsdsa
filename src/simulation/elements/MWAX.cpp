@@ -58,10 +58,10 @@ static int update(UPDATE_FUNC_ARGS) {
 	//if (parts[i].carbons > 7)sim->part_change_type(i, x, y, PT_DESL);
 
 
-	if (parts[i].tmpcity[7] == 0 && parts[i].tmp4 == 0)
+	if (parts[i].capacity == 0 && parts[i].tmp4 == 0)
 	{
 		parts[i].tmp4 = 100;
-		parts[i].tmpcity[7] = 400;
+		parts[i].capacity = 400;
 
 		parts[i].life = RNG::Ref().between(15, 19);
 		parts[i].tmp = makeAlk(sim->parts[i].life);
@@ -70,7 +70,7 @@ static int update(UPDATE_FUNC_ARGS) {
 
 	if (parts[i].tmp4 <= 0)
 	{
-		if (parts[i].oxygens > 0 || parts[i].carbons > 0 || parts[i].hydrogens > 0 || parts[i].water > 0 || parts[i].nitrogens > 0)
+		if (parts[i].oxygens > 0 || parts[i].carbons > 0 || parts[i].co2 > 0 || parts[i].water > 0 || parts[i].nitrogens > 0)
 		{
 				sim->part_change_type(i, x, y, PT_DUST);
 				
@@ -99,8 +99,8 @@ static int update(UPDATE_FUNC_ARGS) {
 static void create(ELEMENT_CREATE_FUNC_ARGS) {
 	//Spawns with carbons (5-7)
 	sim->parts[i].carbons = RNG::Ref().between(5, 7);
-	sim->parts[i].hydrogens = makeAlk(sim->parts[i].carbons);
-	if (sim->parts[i].hydrogens < 2 * sim->parts[i].carbons + 2)sim->parts[i].tmp3 = getBondLoc(sim->parts[i].carbons);
+	sim->parts[i].co2 = makeAlk(sim->parts[i].carbons);
+	if (sim->parts[i].co2 < 2 * sim->parts[i].carbons + 2)sim->parts[i].tmp3 = getBondLoc(sim->parts[i].carbons);
 }
 
 

@@ -74,7 +74,7 @@ static int update(UPDATE_FUNC_ARGS)
 						continue;
 					if (TYP(r)==PT_DEUT&& RNG::Ref().chance(1, 3))
 					{
-						// If neighbour life+1 fits in the free capacity for this particle, absorb neighbour
+						// If neighbour life+1 fits in the free lcapacity for this particle, absorb neighbour
 						// Condition is written in this way so that large neighbour life values don't cause integer overflow
 						if (parts[ID(r)].life <= maxlife - parts[i].life - 1)
 						{

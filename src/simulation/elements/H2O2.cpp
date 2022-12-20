@@ -37,7 +37,7 @@ void Element::Element_H2O2() {
 
 	DefaultProperties.water = 80;
 	DefaultProperties.oxygens = 100;
-	DefaultProperties.tmpcity[7] = 400;
+	DefaultProperties.capacity = 400;
 
 	LowPressure = IPL;
 	LowPressureTransition = NT;

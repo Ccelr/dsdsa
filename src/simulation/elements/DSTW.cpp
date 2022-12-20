@@ -37,7 +37,7 @@ void Element::Element_DSTW()
 
 
 	DefaultProperties.water = 100;
-	DefaultProperties.tmpcity[7] = 400;
+	DefaultProperties.capacity = 400;
 
 	LowPressure = IPL;
 	LowPressureTransition = NT;
@@ -57,7 +57,7 @@ static int update(UPDATE_FUNC_ARGS)
 
 
 	Element_WATR_update(sim, i, x, y, surround_space, nt, parts, pmap);
-	if(parts[i].ctype != 0 || parts[i].hydrogens > 5 || parts[i].oxygens > 5 || parts[i].carbons > 5 || parts[i].tmp4 > 5 || parts[i].nitrogens > 5 || parts[i].water > 5)
+	if(parts[i].ctype != 0 || parts[i].co2 > 5 || parts[i].oxygens > 5 || parts[i].carbons > 5 || parts[i].tmp4 > 5 || parts[i].nitrogens > 5 || parts[i].water > 5)
 		sim->part_change_type(i, x, y, PT_WATR);
 
 	
