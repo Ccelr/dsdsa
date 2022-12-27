@@ -88,7 +88,7 @@ static int update(UPDATE_FUNC_ARGS) {
 		int arraynumbrs[9];
 		int givestuff[9];
 		int rndtmp = 0;*/
-		int capacity = 0;
+		int lcapacity = 0;
 
 	/*	for (ry = -1; ry < 2; ++ry)
 				{

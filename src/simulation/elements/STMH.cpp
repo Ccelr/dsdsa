@@ -67,7 +67,7 @@ static int update(UPDATE_FUNC_ARGS) {
 	 * tmp2: Highest temperature
 	 * tmp3: Type 0 = inside, 1 = skin, 2 = dead
 	 * co2: carbon dioxide & waste
-	 * tmpcity[5] ??
+	 * tmpcity[5] signal to release hcl/water
 	 * tmpville[9] != 0 Deactivates hcl/water production
 	 */
 	Element_FLSH_update(sim, i, x, y, surround_space, nt, parts, pmap);
@@ -92,31 +92,34 @@ static int update(UPDATE_FUNC_ARGS) {
 				r = pmap[y + ry][x + rx];
 				if (!r && parts[i].tmpcity[5] > 0 && parts[i].water > 30 && parts[i].oxygens > 30 && RNG::Ref().chance(1, 8) && parts[i].tmpville[9] == 0)
 				{
-					if (RNG::Ref().chance(1, 3))
+					if (RNG::Ref().chance(1, 2))
 					{
 					
 						parts[i].water -= 20;
 						parts[i].oxygens -= 20;
 						parts[sim->create_part(-1, x + rx, y + ry, PT_HCL)].water += 10;
+						parts[i].tmpcity[5]--;
 					}
 					else
 					{
 						parts[i].water -= 20;
 						parts[sim->create_part(-1, x + rx, y + ry, PT_WATR)].water += 10;
+						parts[i].tmpcity[5]--;
 					}
-					parts[i].tmpcity[5]--;
+					
 				}
 				if (!r) continue;
 				rt = TYP(r);
-				if(parts[ID(r)].tmpcity[5] && ((parts[ID(r)].tmpcity[0] == 1 && RNG::Ref().chance(1, 2)) || (parts[ID(r)].tmpcity[0] == 2 && RNG::Ref().chance(1, 3)) || (parts[ID(r)].tmpcity[0] == 0 && RNG::Ref().chance(1, 10))))
+				if(parts[ID(r)].tmpcity[5] && RNG::Ref().chance(1, 8))
 				{
-					parts[ID(r)].tmpcity[5]++;
-					parts[i].tmpcity[5]--;
+					parts[ID(r)].tmpcity[5]--;
+					parts[i].tmpcity[5]++;
 				}
 
 
 	
-
+				if (sim->elements[rt].Properties & PROP_EDIBLE && parts[ID(r)].tmp4 > 0 && parts[i].tmpcity[0] == 1 && parts[i].tmpcity[5] == 0 && RNG::Ref().chance(1, 50))
+					parts[i].tmpcity[5]++;
 
 
 				//Getting food dissolved in hcl and water

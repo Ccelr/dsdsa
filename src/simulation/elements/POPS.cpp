@@ -89,13 +89,20 @@ static int update(UPDATE_FUNC_ARGS) {
 			parts[i].tmpcity[0] = 1;
 		if (surround_space == 0 && parts[i].tmpcity[0] == 1)
 			parts[i].tmpcity[0] = 0;
-		if (sim->timer % 500 == 0 && parts[i].tmpcity[5] > 0)
-			parts[i].tmpcity[5]--;
+	//	if (sim->timer % 500 == 0 && parts[i].tmpcity[5] > 0)
+	//		parts[i].tmpcity[5]--;
+		if(sim->timer % 5000 == 0 && parts[i].tmpville[14] > 0)
+			parts[i].tmpville[14]--;
+		if(sim->timer % 5000 == 0 && parts[i].tmpville[15] > 0)
+			parts[i].tmpville[15]--;
+			if(sim->timer % 5000 == 0 && parts[i].tmpville[16] > 0)
+			parts[i].tmpville[16]--;
 
 
-
-		if (parts[i].tmpcity[5] < 3 && RNG::Ref().chance(1, 8) && (parts[i].co2 > parts[i].capacity / 4 || parts[i].oxygens > parts[i].capacity / 4 || parts[i].carbons > parts[i].capacity / 4 || parts[i].water > parts[i].capacity / 4 || parts[i].nitrogens > 30))
-			parts[i].tmpcity[5]++;
+		if(parts[i].tmpville[14] < 5 && parts[i].nitrogens > 50 && parts[i].tmpville[16] < 2)
+		parts[i].tmpville[14]++;
+	//	if (parts[i].tmpcity[5] < 3 && RNG::Ref().chance(1, 8) && (parts[i].co2 > parts[i].capacity / 4 || parts[i].oxygens > parts[i].capacity / 4 || parts[i].carbons > parts[i].capacity / 4 || parts[i].water > parts[i].capacity / 4 || parts[i].nitrogens > 30))
+	//		parts[i].tmpcity[5]++;
 			//	if (parts[i].co2 > parts[i].capacity / 2)
 				//{
 		//}
@@ -108,223 +115,260 @@ static int update(UPDATE_FUNC_ARGS) {
 			for (rx = -1; rx < 2; ++rx)
 				if (BOUNDS_CHECK && (rx || ry)) {
 					r = pmap[y + ry][x + rx];
-					int partnum = 10;
-					if (!r && parts[i].pavg[0] != 2 && parts[i].tmpcity[5] > 0 && RNG::Ref().chance(1, 8))
+					int partnum, tmpt = 0;
+					if (!r && parts[i].pavg[0] != 2 && parts[i].tmpville[15] > 0 && parts[i].nitrogens > 50 && parts[i].water > 10 && RNG::Ref().chance(1, 8))
 					{
-						int wste = 0;
-						int dawaste = 0;
-
-						if (parts[i].co2 > 20 && parts[i].co2 > parts[i].capacity / 6 && RNG::Ref().chance(1, 2))
-						{
-						/*	if (wste == 0 && )
-							 wste = sim->create_part(-1, x + rx, y + ry, RNG::Ref().chance(1, 3) ? PT_WSTE : PT_WATR);*/
-							dawaste++;
-							
-
-
-						}
-						if (parts[i].carbons > 20 && parts[i].carbons > parts[i].capacity / 4 && RNG::Ref().chance(1, 2))
-						{
-						/*	if (wste == 0)
-								wste = sim->create_part(-1, x + rx, y + ry, RNG::Ref().chance(1, 3) ? PT_WSTE : PT_WATR);
-							else if (parts[wste].co2 > 0)*/
-							dawaste += 2;
-							
-						}
-
-						 if (parts[i].oxygens > 20 && parts[i].oxygens > parts[i].capacity / 4 && RNG::Ref().chance(1, 2))
-						{
-							// if (wste == 0)
-							//	 wste = sim->create_part(-1, x + rx, y + ry, RNG::Ref().chance(1, 3) ? PT_WSTE : PT_WATR);
-							 dawaste += 4;
-						}
-						 if (parts[i].nitrogens > 10 && RNG::Ref().chance(1, 5))
-						{
-
-
-							 dawaste += 8;
-
-						/*	 if (wste == 0)
-								 wste = sim->create_part(-1, x + rx, y + ry, RNG::Ref().chance(1, 3) ? PT_WSTE : PT_WATR);
-							 parts[wste].nitrogens += 10;
-							 parts[i].nitrogens -= 10;*/
-						}
-						if (parts[i].water > 20 && parts[i].water > parts[i].capacity / 6 && RNG::Ref().chance(1, 2))
-						{
-							dawaste += 16;
-						/*	if (wste == 0)
-								wste = sim->create_part(-1, x + rx, y + ry, RNG::Ref().chance(1, 3) ? PT_WSTE : PT_WATR);
+					int wste = sim->create_part(-1, x + rx, y + ry, PT_WSTE);
+							parts[wste].nitrogens += 50;
 							parts[wste].water += 10;
-							parts[i].water -= 10;*/
-						}
-						//if(wste != 0)
+							parts[i].nitrogens -= 50;
+							parts[i].water -= 10;
+							parts[i].tmpville[15]--;
+							parts[i].tmpville[16]++;
+							break;
+				
+			
+
+
+				}
+				if (!r) continue;
+				rt = TYP(r);
+				if (rt == PT_BRKN)
+					rt = parts[ID(r)].ctype;
+				//if(sim->timer % 501 == 0 && sim->elements[rt].Properties & PROP_EDIBLE && parts[i].tmpcity[0] != 1)
+				//	parts[i].tmpcity[0] = 1;
+				if(parts[ID(r)].pavg[0] != 2)
+				{
+				//signals
+				if(parts[i].tmpville[14] > 0 && parts[ID(r)].tmpville[14] < 5 && RNG::Ref().chance(1, 8))
+				{
+					parts[i].tmpville[14]--;
+					parts[ID(r)].tmpville[14]++;
+				}
+				if(parts[i].tmpville[15] > 0 && parts[ID(r)].tmpville[15] < 5  && RNG::Ref().chance(1, 8))
+				{
+					parts[i].tmpville[15]--;
+					parts[ID(r)].tmpville[15]++;
+				}if(parts[i].tmpville[16] > 0 && parts[ID(r)].tmpville[16] < 5  && RNG::Ref().chance(1, 8))
+				{
+					parts[i].tmpville[16]--;
+					parts[ID(r)].tmpville[16]++;
+				}	
+			//	if (rt == PT_POPS && parts[i].tmpcity[0] == 0 && parts[ID(r)].tmpcity[0] == 1)
+				//	parts[i].tmpcity[0] = 2;
+				// Distribute nutrients
+					
+					// 	if (parts[i].co2 > 20 && parts[i].co2 > parts[i].capacity / 6 && RNG::Ref().chance(1, 2))
+					// 	{
+					// 	/*	if (wste == 0 && )
+					// 		 wste = sim->create_part(-1, x + rx, y + ry, RNG::Ref().chance(1, 3) ? PT_WSTE : PT_WATR);*/
+					// 		dawaste++;
+							
+
+
+					// 	}
+					// 	if (parts[i].carbons > 20 && parts[i].carbons > parts[i].capacity / 4 && RNG::Ref().chance(1, 2))
+					// 	{
+					// 	/*	if (wste == 0)
+					// 			wste = sim->create_part(-1, x + rx, y + ry, RNG::Ref().chance(1, 3) ? PT_WSTE : PT_WATR);
+					// 		else if (parts[wste].co2 > 0)*/
+					// 		dawaste += 2;
+							
+					// 	}
+
+					// 	 if (parts[i].oxygens > 20 && parts[i].oxygens > parts[i].capacity / 4 && RNG::Ref().chance(1, 2))
+					// 	{
+					// 		// if (wste == 0)
+					// 		//	 wste = sim->create_part(-1, x + rx, y + ry, RNG::Ref().chance(1, 3) ? PT_WSTE : PT_WATR);
+					// 		 dawaste += 4;
+					// 	}
+					// 	 if (parts[i].nitrogens > 10 && RNG::Ref().chance(1, 5))
+					// 	{
+
+
+					// 		 dawaste += 8;
+
+					// 	/*	 if (wste == 0)
+					// 			 wste = sim->create_part(-1, x + rx, y + ry, RNG::Ref().chance(1, 3) ? PT_WSTE : PT_WATR);
+					// 		 parts[wste].nitrogens += 10;
+					// 		 parts[i].nitrogens -= 10;*/
+					// 	}
+					// 	if (parts[i].water > 20 && parts[i].water > parts[i].capacity / 6 && RNG::Ref().chance(1, 2))
+					// 	{
+					// 		dawaste += 16;
+					// 	/*	if (wste == 0)
+					// 			wste = sim->create_part(-1, x + rx, y + ry, RNG::Ref().chance(1, 3) ? PT_WSTE : PT_WATR);
+					// 		parts[wste].water += 10;
+					// 		parts[i].water -= 10;*/
+					// 	}
+					// 	//if(wste != 0)
 							
 
 
 
-						switch(dawaste)
-						{ 
+					// 	switch(dawaste)
+					// 	{ 
 						
-						case 1:
+					// 	case 1:
 
 
-					//	parts[wste].co2 += 10;
-					//	parts[i].co2 -= 10;
+					// //	parts[wste].co2 += 10;
+					// //	parts[i].co2 -= 10;
 
 
 
-					//	parts[i].tmpcity[5]--;
-						break;
-						case 2:
-							wste = sim->create_part(-1, x + rx, y + ry, PT_CRBN);
+					// //	parts[i].tmpcity[5]--;
+					// 	break;
+					// 	case 2:
+					// 		wste = sim->create_part(-1, x + rx, y + ry, PT_CRBN);
 
-							parts[wste].carbons += 10;
-							parts[i].carbons -= 10;
-							parts[i].tmpcity[5]--;
-						break;
-						case 3:
-							wste = sim->create_part(-1, x + rx, y + ry, PT_WSTE);
-
-
-							parts[wste].carbons += 10;
-							parts[wste].co2 += 10;
-							parts[i].carbons -= 10;
-							parts[i].co2 -= 10;
-
-							parts[i].tmpcity[5]--;
-							break;
-						case 4:
+					// 		parts[wste].carbons += 10;
+					// 		parts[i].carbons -= 10;
+					// 		parts[i].tmpcity[5]--;
+					// 	break;
+					// 	case 3:
+					// 		wste = sim->create_part(-1, x + rx, y + ry, PT_WSTE);
 
 
-						//	parts[wste].oxygens += 10;
-						//	parts[i].oxygens -= 10;
-						//	parts[i].tmpcity[5]--;
-						break;
-						case 5:
+					// 		parts[wste].carbons += 10;
+					// 		parts[wste].co2 += 10;
+					// 		parts[i].carbons -= 10;
+					// 		parts[i].co2 -= 10;
+
+					// 		parts[i].tmpcity[5]--;
+					// 		break;
+					// 	case 4:
 
 
-						//	parts[i].tmpcity[5]--;
-							break;
-						case 6:
+					// 	//	parts[wste].oxygens += 10;
+					// 	//	parts[i].oxygens -= 10;
+					// 	//	parts[i].tmpcity[5]--;
+					// 	break;
+					// 	case 5:
 
-							wste = sim->create_part(-1, x + rx, y + ry, PT_GAS);
-							parts[wste].carbons += 10;
-							parts[wste].oxygens += 10;
-							parts[i].carbons -= 10;
-							parts[i].oxygens -= 10;
+
+					// 	//	parts[i].tmpcity[5]--;
+					// 		break;
+					// 	case 6:
+
+					// 		wste = sim->create_part(-1, x + rx, y + ry, PT_GAS);
+					// 		parts[wste].carbons += 10;
+					// 		parts[wste].oxygens += 10;
+					// 		parts[i].carbons -= 10;
+					// 		parts[i].oxygens -= 10;
 						
 
 
 
-							parts[i].tmpcity[5]--;
-							break;
+					// 		parts[i].tmpcity[5]--;
+					// 		break;
 
-						case 16:
+					// 	case 16:
 
-							wste = sim->create_part(-1, x + rx, y + ry, PT_WATR);
-							parts[wste].water += 10;
-							parts[i].water -= 10;
-
-
-
-
-							parts[i].tmpcity[5]--;
-							break;
-
-						case 18:
-
-							wste = sim->create_part(-1, x + rx, y + ry, PT_OIL);
-							parts[wste].carbons += 10;
-							parts[wste].water += 10;
-							parts[i].carbons -= 10;
-							parts[i].water -= 10;
+					// 		wste = sim->create_part(-1, x + rx, y + ry, PT_WATR);
+					// 		parts[wste].water += 10;
+					// 		parts[i].water -= 10;
 
 
 
 
-							parts[i].tmpcity[5]--;
-							break;
-						case 19:
+					// 		parts[i].tmpcity[5]--;
+					// 		break;
 
-							wste = sim->create_part(-1, x + rx, y + ry, PT_WSTE);
-							parts[wste].carbons += 10;
-							parts[wste].water += 10;
-							parts[wste].co2 += 10;
-							parts[i].carbons -= 10;
-							parts[i].water -= 10;
-							parts[i].co2 -= 10;
+					// 	case 18:
 
-
-
-
-							parts[i].tmpcity[5]--;
-							break;
-						case 20:
-
-							wste = sim->create_part(-1, x + rx, y + ry, PT_WATR);
-							parts[wste].oxygens += 10;
-							parts[wste].water += 10;
-							parts[i].oxygens -= 10;
-							parts[i].water -= 10;
+					// 		wste = sim->create_part(-1, x + rx, y + ry, PT_OIL);
+					// 		parts[wste].carbons += 10;
+					// 		parts[wste].water += 10;
+					// 		parts[i].carbons -= 10;
+					// 		parts[i].water -= 10;
 
 
 
 
-							parts[i].tmpcity[5]--;
-							break;
+					// 		parts[i].tmpcity[5]--;
+					// 		break;
+					// 	case 19:
 
-						case 22:
-
-							wste = sim->create_part(-1, x + rx, y + ry, PT_DESL);
-							parts[wste].carbons += 10;
-							parts[wste].water += 10;
-							parts[wste].oxygens += 10;
-							parts[i].carbons -= 10;
-							parts[i].water -= 10;
-							parts[i].oxygens -= 10;
-
-
-
-
-							parts[i].tmpcity[5]--;
-							break;
-						case 24:
-
-							wste = sim->create_part(-1, x + rx, y + ry, PT_WSTE);
-							parts[wste].nitrogens += 10;
-							parts[wste].water += 10;
-							parts[i].nitrogens -= 10;
-							parts[i].water -= 10;
+					// 		wste = sim->create_part(-1, x + rx, y + ry, PT_WSTE);
+					// 		parts[wste].carbons += 10;
+					// 		parts[wste].water += 10;
+					// 		parts[wste].co2 += 10;
+					// 		parts[i].carbons -= 10;
+					// 		parts[i].water -= 10;
+					// 		parts[i].co2 -= 10;
 
 
 
 
-							parts[i].tmpcity[5]--;
-							break;
+					// 		parts[i].tmpcity[5]--;
+					// 		break;
+					// 	case 20:
 
-
-						case 27:
-
-							wste = sim->create_part(-1, x + rx, y + ry, PT_WSTE);
-							parts[wste].nitrogens += 10;
-							parts[wste].carbons += 10;
-							parts[wste].co2 += 10;
-							parts[wste].water += 10;
-							parts[i].nitrogens -= 10;
-							parts[i].carbons -= 10;
-							parts[i].co2 -= 10;
-							parts[i].water -= 10;
+					// 		wste = sim->create_part(-1, x + rx, y + ry, PT_WATR);
+					// 		parts[wste].oxygens += 10;
+					// 		parts[wste].water += 10;
+					// 		parts[i].oxygens -= 10;
+					// 		parts[i].water -= 10;
 
 
 
 
-							parts[i].tmpcity[5]--;
-							break;
-						default:
+					// 		parts[i].tmpcity[5]--;
+					// 		break;
+
+					// 	case 22:
+
+					// 		wste = sim->create_part(-1, x + rx, y + ry, PT_DESL);
+					// 		parts[wste].carbons += 10;
+					// 		parts[wste].water += 10;
+					// 		parts[wste].oxygens += 10;
+					// 		parts[i].carbons -= 10;
+					// 		parts[i].water -= 10;
+					// 		parts[i].oxygens -= 10;
 
 
-							break;
-						}
+
+
+					// 		parts[i].tmpcity[5]--;
+					// 		break;
+					// 	case 24:
+
+					// 		wste = sim->create_part(-1, x + rx, y + ry, PT_WSTE);
+					// 		parts[wste].nitrogens += 10;
+					// 		parts[wste].water += 10;
+					// 		parts[i].nitrogens -= 10;
+					// 		parts[i].water -= 10;
+
+
+
+
+					// 		parts[i].tmpcity[5]--;
+					// 		break;
+
+
+					// 	case 27:
+
+					// 		wste = sim->create_part(-1, x + rx, y + ry, PT_WSTE);
+					// 		parts[wste].nitrogens += 10;
+					// 		parts[wste].carbons += 10;
+					// 		parts[wste].co2 += 10;
+					// 		parts[wste].water += 10;
+					// 		parts[i].nitrogens -= 10;
+					// 		parts[i].carbons -= 10;
+					// 		parts[i].co2 -= 10;
+					// 		parts[i].water -= 10;
+
+
+
+
+					// 		parts[i].tmpcity[5]--;
+					// 		break;
+					// 	default:
+
+
+					// 		break;
+					// 	}
 
 
 
@@ -334,27 +378,31 @@ static int update(UPDATE_FUNC_ARGS) {
 				
 					
 					//parts[i].tmpcity[5\]--;
-				}
-				if (!r) continue;
-				rt = TYP(r);
-				if (rt == PT_BRKN)
-					rt = parts[ID(r)].ctype;
-				//if(sim->timer % 501 == 0 && sim->elements[rt].Properties & PROP_EDIBLE && parts[i].tmpcity[0] != 1)
-				//	parts[i].tmpcity[0] = 1;
+				
 
-				if (rt == PT_POPS && parts[i].tmpcity[0] == 0 && parts[ID(r)].tmpcity[0] == 1)
-					parts[i].tmpcity[0] = 2;
+
+
+
+					
+
+
+
+
+
+
+
+
 				//(sim->elements[rt].Properties & PROP_EDIBLE && parts[ID(r)].tmp4 > 0 && parts[i].tmpcity[0] == 1 && parts[i].tmpcity[1] == 0 && RNG::Ref().chance(1, 50))
 				//if()
 			//	{
 			//		parts[i].tmpcity[1]++;
 			//	}
 			
-				if (rt == PT_POPS && parts[i].tmpcity[5] > 0 && parts[i].tmpcity[5] > parts[ID(r)].tmpcity[5]  && parts[ID(r)].tmpcity[5] < 3 && ((parts[ID(r)].tmpcity[0] == 1 && RNG::Ref().chance(1, 2)) || (parts[ID(r)].tmpcity[0] == 2 && RNG::Ref().chance(1, 3)) || (parts[ID(r)].tmpcity[0] == 0 && RNG::Ref().chance(1, 10))))
-				{
-					parts[ID(r)].tmpcity[5]++;
-					parts[i].tmpcity[5]--;
-				}
+				// if (rt == PT_POPS && parts[i].tmpcity[5] > 0 && parts[i].tmpcity[5] > parts[ID(r)].tmpcity[5]  && parts[ID(r)].tmpcity[5] < 3 && ((parts[ID(r)].tmpcity[0] == 1 && RNG::Ref().chance(1, 2)) || (parts[ID(r)].tmpcity[0] == 2 && RNG::Ref().chance(1, 3)) || (parts[ID(r)].tmpcity[0] == 0 && RNG::Ref().chance(1, 10))))
+				// {
+				// 	parts[ID(r)].tmpcity[5]++;
+				// 	parts[i].tmpcity[5]--;
+				// }
 			/*	if (rt == PT_POPS && parts[i].tmpcity[6] > 0 && parts[i].tmpcity[6] > parts[ID(r)].tmpcity[6] && ((parts[ID(r)].tmpcity[0] == 1 && RNG::Ref().chance(1, 2)) || (parts[ID(r)].tmpcity[0] == 2 && RNG::Ref().chance(1, 3)) || (parts[ID(r)].tmpcity[0] == 0 && RNG::Ref().chance(1, 10))))
 				{
 					parts[ID(r)].tmpcity[6]++;
@@ -463,6 +511,7 @@ static int update(UPDATE_FUNC_ARGS) {
 
 				}*/
 			}
+				}
 	}
 
 	return 0;
@@ -471,9 +520,9 @@ static int update(UPDATE_FUNC_ARGS) {
 static int graphics(GRAPHICS_FUNC_ARGS) {
 	// Redden if oxygenated
 	int red = std::min(20, cpart->oxygens / 10);
-	*colr += cpart->tmpcity[5] * 50;
+	*colr += cpart->tmpcity[14] * 50;
 	*colg -= red;
-	*colb -= cpart->tmpcity[0] * 255;
+	*colb -= cpart->nitrogens * 50;
 
 	// Cooking
 	// Well done (Around 70 - 80 C)

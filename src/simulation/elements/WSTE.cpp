@@ -6,7 +6,7 @@ static int graphics(GRAPHICS_FUNC_ARGS);
 void Element::Element_WSTE() {
 	Identifier = "DEFAULT_PT_WSTE";
 	Name = "WSTE";
-	Colour = PIXPACK(0x222222);
+	Colour = PIXPACK(0x7b5c00);
 	MenuVisible = 1;
 	MenuSection = SC_POWDERS;
 	Enabled = 1;

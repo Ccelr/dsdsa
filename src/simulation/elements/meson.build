@@ -230,6 +230,7 @@ simulation_elem_ids = [
 	[ 'LUNG', 	mod_id_offset + 35 ],
 	[ 'BVSL', 	mod_id_offset + 36 ],
 	[ 'POPS', 	mod_id_offset + 37 ],
+	[ 'BRIN', 	mod_id_offset + 38 ],
 ]
 
 simulation_elem_src = []

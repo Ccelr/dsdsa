@@ -2394,19 +2394,19 @@ void GameView::OnDraw()
 			else 
 			{
 				if (sample.particle.oxygens != 0)
-					sampleInfo << ", Oxygens: " << sample.particle.oxygens;
+					sampleInfo << ", O2: " << sample.particle.oxygens;
 				if (sample.particle.carbons != 0)
-					sampleInfo << ", Nutrients(carbons): " << sample.particle.carbons;
+					sampleInfo << ", Nutrients(carb): " << sample.particle.carbons;
 				if (sample.particle.water != 0)
-					sampleInfo << ", Water: " << sample.particle.water;
+					sampleInfo << ", H2O: " << sample.particle.water;
 				if (sample.particle.co2 != 0)
 					sampleInfo << ", CO2: " << sample.particle.co2;
 				if (sample.particle.tmp3 != 0)
 					sampleInfo << ", Health(tmp3): " << sample.particle.tmp3;
 				if (sample.particle.tmpcity[3] != 0)
-					sampleInfo << ", Energy(tmpcity[3]): " << sample.particle.tmpcity[3];
+					sampleInfo << ", Energy(city[3]): " << sample.particle.tmpcity[3];
 				if (sample.particle.nitrogens != 0)
-					sampleInfo << ", Nitrogens: " << sample.particle.nitrogens;
+					sampleInfo << ", Waste(nitr): " << sample.particle.nitrogens;
 				StringBuilder TmpCityStrings;
 				if (sample.particle.tmpcity[0] != 0)
 					TmpCityStrings << "tmpcity[0]: " << sample.particle.tmpcity[0];
@@ -2455,6 +2455,22 @@ void GameView::OnDraw()
 					TmpvilleStrings << ", tmpville[8]: " << sample.particle.tmpville[8];
 				if (sample.particle.tmpville[9] != 0)
 					TmpvilleStrings << ", tmpville[9]: " << sample.particle.tmpville[9];
+				if (sample.particle.tmpville[10] != 0)
+					TmpvilleStrings << ", tmpville[10]: " << sample.particle.tmpville[10];
+					if (sample.particle.tmpville[11] != 0)
+					TmpvilleStrings << ", tmpville[11]: " << sample.particle.tmpville[11];
+					if (sample.particle.tmpville[12] != 0)
+					TmpvilleStrings << ", tmpville[12]: " << sample.particle.tmpville[12];
+					if (sample.particle.tmpville[13] != 0)
+					TmpvilleStrings << ", tmpville[13]: " << sample.particle.tmpville[13];
+					if (sample.particle.tmpville[14] != 0)
+					TmpvilleStrings << ", tmpville[14]: " << sample.particle.tmpville[14];
+					if (sample.particle.tmpville[15] != 0)
+					TmpvilleStrings << ", tmpville[15]: " << sample.particle.tmpville[15];
+					if (sample.particle.tmpville[16] != 0)
+					TmpvilleStrings << ", tmpville[16]: " << sample.particle.tmpville[16];
+					if (sample.particle.tmpville[17] != 0)
+					TmpvilleStrings << ", tmpville[17]: " << sample.particle.tmpville[17];
 				textWidth = Graphics::textwidth(TmpvilleStrings.Build());
 				g->fillrect(XRES - 20 - textWidth, 51, textWidth + 8, 14, 0, 0, 0, int(alpha * 0.5f));
 				g->drawtext(XRES - 16 - textWidth, 68, TmpvilleStrings.Build(), 255, 255, 255, int(alpha * 0.75f));
