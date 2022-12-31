@@ -295,20 +295,20 @@ if (parts[i].capacity == 0)
 
 					//signals 
 				//signals
-				if(parts[i].tmpville[14] > 0 && parts[ID(r)].tmpville[14] < 5 && RNG::Ref().chance(1, 8))
-				{
-					parts[i].tmpville[14]--;
-					parts[ID(r)].tmpville[14]++;
-				}
-				if(parts[i].tmpville[15] > 0 && parts[ID(r)].tmpville[15] < 5  && RNG::Ref().chance(1, 8))
-				{
-					parts[i].tmpville[15]--;
-					parts[ID(r)].tmpville[15]++;
-				}if(parts[i].tmpville[16] > 0 && parts[ID(r)].tmpville[16] < 5  && RNG::Ref().chance(1, 8))
-				{
-					parts[i].tmpville[16]--;
-					parts[ID(r)].tmpville[16]++;
-				}	
+				// if(parts[i].tmpville[14] > 0 && parts[ID(r)].tmpville[14] < 5 && RNG::Ref().chance(1, 8))
+				// {
+				// 	parts[i].tmpville[14]--;
+				// 	parts[ID(r)].tmpville[14]++;
+				// }
+				// if(parts[i].tmpville[15] > 0 && parts[ID(r)].tmpville[15] < 5  && RNG::Ref().chance(1, 8))
+				// {
+				// 	parts[i].tmpville[15]--;
+				// 	parts[ID(r)].tmpville[15]++;
+				// }if(parts[i].tmpville[16] > 0 && parts[ID(r)].tmpville[16] < 5  && RNG::Ref().chance(1, 8))
+				// {
+				// 	parts[i].tmpville[16]--;
+				// 	parts[ID(r)].tmpville[16]++;
+				// }	
 					// Oxygenate
 					//if (rt == PT_O2 && parts[i].oxygens < 100) {
 					//	parts[i].oxygens += 10;
@@ -351,7 +351,7 @@ if (parts[i].capacity == 0)
 									parts[i].co2 += std::min(partnum, parts[ID(r)].co2 - 10);
 									parts[ID(r)].co2 -= std::min(partnum, parts[ID(r)].co2 - 10);
 								}
-								if (parts[i].nitrogens < parts[i].capacity / 3 && parts[ID(r)].nitrogens >= 10 + 10 && parts[i].nitrogens < parts[ID(r)].nitrogens)
+								if (parts[i].nitrogens < parts[i].capacity / 3 && parts[ID(r)].nitrogens >= 10 + 10 && parts[i].nitrogens < parts[ID(r)].nitrogens && rt != PT_POPS)
 								{
 									parts[i].nitrogens += std::min(partnum, parts[ID(r)].nitrogens - 10);
 									parts[ID(r)].nitrogens -= std::min(partnum, parts[ID(r)].nitrogens - 10);
@@ -387,7 +387,7 @@ if (parts[i].capacity == 0)
 						 			parts[ID(r)].co2 += std::min(partnum, parts[i].co2 - 10);
 						 			parts[i].co2 -= std::min(partnum, parts[i].co2 - 10);
 						 		}
-						 		if (parts[ID(r)].nitrogens < parts[ID(r)].capacity / 3 && parts[i].nitrogens >= 10 + 10 && parts[ID(r)].nitrogens   < parts[i].nitrogens)
+						 		if (parts[ID(r)].nitrogens < parts[ID(r)].capacity / 3 && parts[i].nitrogens >= 10 + 10 && parts[ID(r)].nitrogens < parts[i].nitrogens)
 						 		{
 						 			parts[ID(r)].nitrogens += std::min(partnum, parts[i].nitrogens - 10);
 						 			parts[i].nitrogens -= std::min(partnum, parts[i].nitrogens - 10);
@@ -401,9 +401,11 @@ if (parts[i].capacity == 0)
 
 								if ((rt == PT_BVSL || rt == PT_BLOD))
 								{
+
+									//take
 									if(RNG::Ref().chance(1, 2))
 									{
-
+											
 								if (parts[i].carbons < parts[i].capacity / 3 && parts[ID(r)].carbons >= 10 + 10 && parts[i].carbons * 1.5f < parts[ID(r)].carbons)
 								{
 									tmpt = parts[i].carbons;
@@ -420,7 +422,7 @@ if (parts[i].capacity == 0)
 								//	parts[i].co2 += std::min(partnum, parts[ID(r)].co2 - 10);
 								//	parts[ID(r)].co2 -= std::min(partnum, parts[ID(r)].co2 - 10);
 								}
-								if (parts[i].nitrogens < parts[i].capacity / 3 && parts[ID(r)].nitrogens >= 10 + 10 && parts[i].nitrogens * 1.5f < parts[ID(r)].nitrogens)
+								if (parts[i].nitrogens < parts[i].capacity / 3 && parts[ID(r)].nitrogens >= 10 + 10 && parts[i].nitrogens * 1.5f < parts[ID(r)].nitrogens && rt != PT_POPS)
 								{	
 									tmpt = parts[i].nitrogens;
 									parts[i].nitrogens = parts[ID(r)].nitrogens;
@@ -454,6 +456,8 @@ if (parts[i].capacity == 0)
 								//	parts[ID(r)].nitrogens -= std::min(partnum, parts[ID(r)].nitrogens - 10);
 								}
 								}
+
+								//give
 								else
 								{
 

@@ -4,10 +4,10 @@ static int update(UPDATE_FUNC_ARGS);
 static int graphics(GRAPHICS_FUNC_ARGS);
 int Element_FLSH_update(UPDATE_FUNC_ARGS);
 
-void Element::Element_BRIN() {
-	Identifier = "DEFAULT_PT_BRIN";
-	Name = "BRIN";
-	Colour = PIXPACK(0xd9a5b2);
+void Element::Element_NRVE() {
+	Identifier = "DEFAULT_PT_NRVE";
+	Name = "NRVE";
+	Colour = PIXPACK(0xFFC6AD);
 	MenuVisible = 1;
 	MenuSection = SC_ORGANIC;
 	Enabled = 1;
@@ -30,7 +30,7 @@ void Element::Element_BRIN() {
 	Weight = 100;
 
 	HeatConduct = 104;
-	Description = "Brain. Receives, processes and outputs signals.";
+	Description = "Nerves. Transports signals from organs or brain.";
 
 	Properties = TYPE_SOLID | PROP_NEUTPENETRATE | PROP_ORGANISM | PROP_ANIMAL;
 
@@ -79,10 +79,9 @@ static int update(UPDATE_FUNC_ARGS) {
 	if (surround_space == 0 && sim->timer % 50 == 0 && parts[i].tmpcity[0] != 0)
 		parts[i].tmpcity[0] = 0;
 
-
 	
 		int rx, ry, r, rt;
-		int lcapacity, updmetab = 0;
+		int lcapacity = 0;
 		for (ry = -1; ry < 2; ++ry)
 			for (rx = -1; rx < 2; ++rx)
 			if (BOUNDS_CHECK && (rx || ry)) {
@@ -108,38 +107,59 @@ static int update(UPDATE_FUNC_ARGS) {
 				if (!r) continue;
 				rt = TYP(r);
 				//signals
-				//signals
-				// if(parts[i].tmpville[14] > 0 && parts[ID(r)].tmpville[14] < 2 && RNG::Ref().chance(1, 8))
+				// give
+				// if(RNG::Ref().chance(1, 2))
+				// {
+				// if(parts[i].tmpville[14] > 0 && parts[i].tmpville[14] > parts[ID(r)].tmpville[14] && (parts[ID(r)].tmpville[14] < 10 && rt == PT_NRVE || parts[ID(r)].tmpville[14] < 5 && rt != PT_NRVE) && RNG::Ref().chance(1, 8))
 				// {
 				// 	parts[i].tmpville[14]--;
 				// 	parts[ID(r)].tmpville[14]++;
 				// }
-				// if(parts[i].tmpville[15] > 0 && parts[ID(r)].tmpville[15] < 2  && RNG::Ref().chance(1, 8))
+				// if(parts[i].tmpville[15] > 0 && parts[i].tmpville[15] > parts[ID(r)].tmpville[15] && (parts[ID(r)].tmpville[15] < 10 && rt == PT_NRVE || parts[ID(r)].tmpville[15] < 5 && rt != PT_NRVE)  && RNG::Ref().chance(1, 8))
 				// {
 				// 	parts[i].tmpville[15]--;
 				// 	parts[ID(r)].tmpville[15]++;
-				// }if(parts[i].tmpville[16] > 0 && parts[ID(r)].tmpville[16] < 2  && RNG::Ref().chance(1, 8))
+				// }if(parts[i].tmpville[16] > 0 && parts[i].tmpville[16] > parts[ID(r)].tmpville[16] && (parts[ID(r)].tmpville[16] < 10 && rt == PT_NRVE || parts[ID(r)].tmpville[16] < 5 && rt != PT_NRVE)  && RNG::Ref().chance(1, 8))
 				// {
 				// 	parts[i].tmpville[16]--;
 				// 	parts[ID(r)].tmpville[16]++;
 				// }	
+				// }
+				// else
+				// {
+				// //take
+				// if(parts[ID(r)].tmpville[14] > 0 && parts[ID(r)].tmpville[14] > parts[i].tmpville[14] && (parts[i].tmpville[14] < 10 && rt == PT_NRVE || parts[i].tmpville[14] < 5 && rt != PT_NRVE) && RNG::Ref().chance(1, 8))
+				// {
+				// 	parts[ID(r)].tmpville[14]--;
+				// 	parts[i].tmpville[14]++;
+				// }
+				// if(parts[ID(r)].tmpville[15] > 0 && parts[ID(r)].tmpville[15] > parts[i].tmpville[15] && (parts[i].tmpville[15] < 10 && rt == PT_NRVE || parts[i].tmpville[15] < 5 && rt != PT_NRVE)  && RNG::Ref().chance(1, 8))
+				// {
+				// 	parts[ID(r)].tmpville[15]--;
+				// 	parts[i].tmpville[15]++;
+				// }if(parts[ID(r)].tmpville[16] > 0 && parts[ID(r)].tmpville[16] > parts[i].tmpville[16] && (parts[i].tmpville[16] < 10 && rt == PT_NRVE || parts[i].tmpville[16] < 5 && rt != PT_NRVE)  && RNG::Ref().chance(1, 8))
+				// {
+				// 	parts[ID(r)].tmpville[16]--;
+				// 	parts[i].tmpville[16]++;
+				// }	
+				// }
+
+
 
 				//signal parse
-				// metabolism dependent
-			
-				if(parts[i].tmpville[16] <= 0 && sim->timer % (int)restrict_flt(parts[i].metabolism, 1, MAX_TEMP) == 0)
-				{
-					if((parts[ID(r)].tmpville[14] > 0 || parts[i].nitrogens > 50) && parts[i].tmpville[15] < 100)
-					{
-					parts[i].tmpville[15]++;
-					//parts[i].tmpville[14]--;
-					}
-				}
-				else if(RNG::Ref().chance(1, 8))
-				{
-					parts[i].tmpville[16]--;
-				}
-				
+				// if(parts[i].tmpville[16] <= 0)
+				// {
+				// 	if((parts[ID(r)].tmpville[14] > 0 || parts[i].nitrogens > 50) && parts[i].tmpville[15] < 5)
+				// 	{
+				// 	parts[i].tmpville[15]++;
+				// 	//parts[i].tmpville[14]--;
+				// 	}
+				// }
+				// else
+				// {
+				// 	parts[i].tmpville[16]--;
+				// }
+
 	
 				
 
@@ -218,9 +238,9 @@ static int update(UPDATE_FUNC_ARGS) {
 static int graphics(GRAPHICS_FUNC_ARGS) {
 	// Redden if oxygenated
 	int red = std::min(20, cpart->oxygens / 10);
-	*colr += cpart->tmpville[15] ;
-	*colg -= cpart->tmpville[14] +red;
-	*colb -= (cpart->tmpcity[9] + cpart->tmpville[14]) / 255 ;
+	*colr += red + cpart->tmpville[16]/ 3;
+	*colg -= cpart->tmpville[14]/ 3;
+	*colb -= cpart->tmpville[15] / 3;
 
 	// Cooking
 	// Well done (Around 70 - 80 C)
@@ -232,10 +252,6 @@ static int graphics(GRAPHICS_FUNC_ARGS) {
 		*colg -= (*colg - 131) * percent_fade;
 		*colb -= (*colb - 90) * percent_fade;
 
-		// Grill lines
-		if ((nx + ny) % 30 < 3) {
-			*colr *= 0.9f, *colg *= 0.9f, *colb *= 0.9f;
-		}
 	}
 	// Burnt (Above 110 C)
 	if (cpart->tmp2 > 273.15f + 110.0f) {

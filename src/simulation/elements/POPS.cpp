@@ -91,15 +91,15 @@ static int update(UPDATE_FUNC_ARGS) {
 			parts[i].tmpcity[0] = 0;
 	//	if (sim->timer % 500 == 0 && parts[i].tmpcity[5] > 0)
 	//		parts[i].tmpcity[5]--;
-		if(sim->timer % 5000 == 0 && parts[i].tmpville[14] > 0)
-			parts[i].tmpville[14]--;
-		if(sim->timer % 5000 == 0 && parts[i].tmpville[15] > 0)
-			parts[i].tmpville[15]--;
-			if(sim->timer % 5000 == 0 && parts[i].tmpville[16] > 0)
-			parts[i].tmpville[16]--;
+		// if(sim->timer % 5000 == 0 && parts[i].tmpville[14] > 0)
+		// 	parts[i].tmpville[14]--;
+		// if(sim->timer % 5000 == 0 && parts[i].tmpville[15] > 0)
+		// 	parts[i].tmpville[15]--;
+		// 	if(sim->timer % 5000 == 0 && parts[i].tmpville[16] > 0)
+		// 	parts[i].tmpville[16]--;
 
 
-		if(parts[i].tmpville[14] < 5 && parts[i].nitrogens > 50 && parts[i].tmpville[16] < 2)
+		if(parts[i].tmpville[14] < 300 && parts[i].nitrogens > 50 && parts[i].tmpville[16] < 2)
 		parts[i].tmpville[14]++;
 	//	if (parts[i].tmpcity[5] < 3 && RNG::Ref().chance(1, 8) && (parts[i].co2 > parts[i].capacity / 4 || parts[i].oxygens > parts[i].capacity / 4 || parts[i].carbons > parts[i].capacity / 4 || parts[i].water > parts[i].capacity / 4 || parts[i].nitrogens > 30))
 	//		parts[i].tmpcity[5]++;
@@ -140,20 +140,20 @@ static int update(UPDATE_FUNC_ARGS) {
 				if(parts[ID(r)].pavg[0] != 2)
 				{
 				//signals
-				if(parts[i].tmpville[14] > 0 && parts[ID(r)].tmpville[14] < 5 && RNG::Ref().chance(1, 8))
-				{
-					parts[i].tmpville[14]--;
-					parts[ID(r)].tmpville[14]++;
-				}
-				if(parts[i].tmpville[15] > 0 && parts[ID(r)].tmpville[15] < 5  && RNG::Ref().chance(1, 8))
-				{
-					parts[i].tmpville[15]--;
-					parts[ID(r)].tmpville[15]++;
-				}if(parts[i].tmpville[16] > 0 && parts[ID(r)].tmpville[16] < 5  && RNG::Ref().chance(1, 8))
-				{
-					parts[i].tmpville[16]--;
-					parts[ID(r)].tmpville[16]++;
-				}	
+				// if(parts[i].tmpville[14] > 0 && parts[ID(r)].tmpville[14] < 5 && RNG::Ref().chance(1, 8))
+				// {
+				// 	parts[i].tmpville[14]--;
+				// 	parts[ID(r)].tmpville[14]++;
+				// }
+				// if(parts[i].tmpville[15] > 0 && parts[ID(r)].tmpville[15] < 5  && RNG::Ref().chance(1, 8))
+				// {
+				// 	parts[i].tmpville[15]--;
+				// 	parts[ID(r)].tmpville[15]++;
+				// }if(parts[i].tmpville[16] > 0 && parts[ID(r)].tmpville[16] < 5  && RNG::Ref().chance(1, 8))
+				// {
+				// 	parts[i].tmpville[16]--;
+				// 	parts[ID(r)].tmpville[16]++;
+				// }	
 			//	if (rt == PT_POPS && parts[i].tmpcity[0] == 0 && parts[ID(r)].tmpcity[0] == 1)
 				//	parts[i].tmpcity[0] = 2;
 				// Distribute nutrients

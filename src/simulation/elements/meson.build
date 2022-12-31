@@ -231,6 +231,7 @@ simulation_elem_ids = [
 	[ 'BVSL', 	mod_id_offset + 36 ],
 	[ 'POPS', 	mod_id_offset + 37 ],
 	[ 'BRIN', 	mod_id_offset + 38 ],
+	[ 'NRVE', 	mod_id_offset + 39 ],
 ]
 
 simulation_elem_src = []
